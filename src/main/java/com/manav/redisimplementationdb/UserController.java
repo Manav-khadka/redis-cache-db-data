@@ -1,5 +1,6 @@
 package com.manav.redisimplementationdb;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,10 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@Controller
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping("/hello")
     public String hello() {
         return "Hello World";
@@ -29,5 +35,11 @@ public class UserController {
     public ResponseEntity<List<Users>>addUsers(@RequestBody List<Users> users) {
         List<Users> users1 = userService.addUsers(users);
         return ResponseEntity.ok().body(users1);
+    }
+    @PostMapping("/add-user")
+    public ResponseEntity<Users>addUser(@RequestBody Users user) {
+        System.out.println(user.getCity());
+        Users user1 = userService.createUser(user);
+        return ResponseEntity.ok().body(user1);
     }
 }

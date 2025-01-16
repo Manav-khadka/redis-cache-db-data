@@ -12,16 +12,21 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
 
     @Override
     public Users createUser(Users user) {
-        return null;
+        userRepository.save(user);
+        return user;
     }
+
     public List<Users> addUsers(List<Users> users) {
-        log.atInfo().log("Adding users to the database"+ users);
+//        System.out.println(users.get(0).getCity());
         return userRepository.saveAll(users);
     }
 
@@ -41,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "Users")
+    @Cacheable(value = "users")
     public List<Users> getUsers() {
         return userRepository.findAll();
     }
